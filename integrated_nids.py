@@ -356,7 +356,6 @@ class UnifiedNIDS:
                     
                     sport = socket.ntohs(k.src_port)
                     dport = socket.ntohs(k.dst_port)
-                    # CIC-IDS usually sets Destination Port to the server port (typically lower number like 443/80/53)
                     srv_port = sport if sport < dport else dport
                     
                     feat_dict = {
@@ -417,9 +416,6 @@ class UnifiedNIDS:
                     print(f"Flow {src_str}:{socket.ntohs(k.src_port)} -> {dst_str}:{socket.ntohs(k.dst_port)} | {status} (Err: {err:.4f}, by {method})")
                     
                     # 2. BLOCK IP AT KERNEL LEVEL WITH XDP IF ANOMALY
-                    # Note: We enforce a safety check! Set ENABLE_BLOCKING to True once your threshold is tuned.
-                    # Because eBPF extracts features slightly differently from CICFlowMeter (Java app),
-                    # reconstruction errors will naturally be slightly higher for all flows initially.
                     ENABLE_BLOCKING = False 
                     
                     if is_anom:
